@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -21,31 +22,36 @@ import static org.hamcrest.Matchers.equalTo;
 
 @Slf4j
 public class QueryParamsPeopleServiceTest {
-
     @DisplayName("Shameful test")
     @Tag("Known Issue")
     @Test
+    @Disabled("JIRA_TICKET-76531")
     public void shouldGreetPersonWithFirstNameAndLastName() {
         given().queryParam("first_name", "Tomasz")
                 .queryParam("last_name", "Kowalski")
                 .when()
+                .log().method().log().parameters()
                 .get("/query_params")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .body("Greeting", equalTo("Hello, Andrzej Kowalski!"));
+                .body("Greeting", equalTo("Hello, Andrzej Kowalski!"))
+                .log().ifValidationFails();
     }
+
 
     @Test
     public void shouldGreetPersonWithFullName() {
         given().queryParam("first_name", "Tomasz")
                 .queryParam("last_name", "Kowalski")
                 .when()
+                .log().method().log().parameters()
                 .get("/query_params")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .body("Greeting", equalTo("Hello, Tomasz Kowalski!"));
+                .body("Greeting", equalTo("Hello, Tomasz Kowalski!"))
+                .log().ifValidationFails();
     }
 
     @Test

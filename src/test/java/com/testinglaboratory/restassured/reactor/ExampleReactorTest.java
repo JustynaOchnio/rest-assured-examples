@@ -11,13 +11,13 @@ public class ExampleReactorTest {
 
     @BeforeAll
     public static void setUp() {
-        RestAssured.baseURI = "http://localhost:8083/";
-        RestAssured.basePath = "challenge/reactor/";
+        RestAssured.baseURI = "http://localhost:8083";
+        RestAssured.basePath = "/challenge/reactor";
     }
 
     @Test
     void checkInformation(){
-       when().get("information")
+       when().get("/information")
        .then().log().everything();
     }
 }
