@@ -2,26 +2,22 @@ package com.testinglaboratory.restassured.foundations.simple.crud;
 
 import com.github.javafaker.Faker;
 import com.google.gson.JsonObject;
-import io.restassured.response.ResponseBody;
-import io.restassured.response.ResponseBodyExtractionOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Locale;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.in;
 
 @Slf4j
-public class CreateHumanTest {
+class CreateHumanTest {
 
     @Test
-    public void createHuman() {
+    void createHuman() {
         Faker fake = new Faker(new Locale("PL_pl"));
         String firstName = fake.name().firstName();
         String lastName = fake.name().lastName();
@@ -39,7 +35,7 @@ public class CreateHumanTest {
     }
 
     @Test
-    public void createHumanValidatingResponse() {
+    void createHumanValidatingResponse() {
         Faker fake = new Faker(new Locale("PL_pl"));
         String firstName = fake.name().firstName();
         String lastName = fake.name().lastName();

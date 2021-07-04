@@ -1,6 +1,7 @@
-package com.testinglaboratory.restassured.primer;
+package com.testinglaboratory.restassured.primer.lifecyclefiddle;
 
 import com.github.javafaker.Faker;
+import com.testinglaboratory.restassured.primer.User;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.path.json.config.JsonPathConfig;
@@ -20,10 +21,19 @@ import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+/**
+ * In order for private finals to work the Lifecycle has to be defined per method (default behaviour)
+ * in jUnit4 and TestNg the default behaviour is per class
+ * it means that there is only one instance of a class is created, but
+ *
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RegistrationTest {
+class FAILING_WORNG_LIFECYCLE_PER_CLASS_RegistrationTestJunitLifecyclePerMethodTest {
     private static final Faker faker = new Faker(new Locale("PL_pl"));
-    private static final String KEY_PATTERN_MATCHER = "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}";
+    private final String username = faker.name().username();
+    private final String password = faker.internet().password();
+    private final User user = new User(username, password);
+
     @BeforeAll
     public static void setUp() {
         RestAssured.baseURI = "http://localhost:8082";
@@ -35,9 +45,6 @@ class RegistrationTest {
 
     @Test
     void registerUserTest() {
-        String username = String.format("%s.%s", faker.name().firstName(), faker.name().username());
-        String password = faker.internet().password();
-
         Response response = given()
                 .body(
                         Map.of(
@@ -58,14 +65,12 @@ class RegistrationTest {
         JsonPathConfig jsonPathConfig = new JsonPathConfig().charset("utf-8");
         assertThat(response.jsonPath(jsonPathConfig).getString("key"))
                 .as("Generated UUID composition")
-                .matches(KEY_PATTERN_MATCHER);
+                .matches("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}");
     }
 
 
     @Test
     void doubleRegistrationFlag() {
-        User user = new User(faker.name().username(), faker.internet().password());
-
         Response firstRegistration = registerUser(user);
         firstRegistration.then().statusCode(SC_CREATED);
         Response secondRegistration = registerUser(user);
@@ -78,8 +83,6 @@ class RegistrationTest {
 
     @Test
     void doubleRegistrationFlagAnotherStyle() {
-        User user = new User(faker.name().username(), faker.internet().password());
-
         registerUser(user, SC_CREATED);
         registerUser(user, SC_BAD_REQUEST)
                 .body(

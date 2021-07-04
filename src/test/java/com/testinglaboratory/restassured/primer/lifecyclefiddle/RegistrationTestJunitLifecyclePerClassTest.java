@@ -1,6 +1,7 @@
-package com.testinglaboratory.restassured.primer;
+package com.testinglaboratory.restassured.primer.lifecyclefiddle;
 
 import com.github.javafaker.Faker;
+import com.testinglaboratory.restassured.primer.User;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.path.json.config.JsonPathConfig;
@@ -21,9 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RegistrationTest {
+class RegistrationTestJunitLifecyclePerClassTest {
     private static final Faker faker = new Faker(new Locale("PL_pl"));
-    private static final String KEY_PATTERN_MATCHER = "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}";
+
     @BeforeAll
     public static void setUp() {
         RestAssured.baseURI = "http://localhost:8082";
@@ -58,7 +59,7 @@ class RegistrationTest {
         JsonPathConfig jsonPathConfig = new JsonPathConfig().charset("utf-8");
         assertThat(response.jsonPath(jsonPathConfig).getString("key"))
                 .as("Generated UUID composition")
-                .matches(KEY_PATTERN_MATCHER);
+                .matches("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}");
     }
 
 
