@@ -1,17 +1,14 @@
 package com.testinglaboratory.restassured.foundations.simple.queryparams;
 
 import com.github.javafaker.Faker;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -27,7 +24,7 @@ public class QueryParamsPeopleServiceTest {
     @Test
     @Disabled("JIRA_TICKET-76531")
     public void shouldGreetPersonWithFirstNameAndLastName() {
-        given().queryParam("first_name", "Tomasz")
+        given().queryParam("first_name", "Andrzej")
                 .queryParam("last_name", "Kowalski")
                 .when()
                 .log().method().log().parameters()
